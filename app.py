@@ -18,7 +18,7 @@ monkey.patch_all()  # 猴子补丁
 @app.route('/')
 def index():
     info = {
-        'Title': u'GatherValidProxy',
+        'Title': u'Proxy-pool',
         'Method': [u'/getsocks  --> get a sock proxy',
                    u'/gethttps  --> get a http(s) proxy',
                    u'/refresh  --> refresh proxies'],
