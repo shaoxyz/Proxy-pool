@@ -3,10 +3,16 @@
 # File    : getsocks.py
 # Time    : 2017/8/14 12:16
 # Author  : shaweb
+"""
+墙外的代理网站GatherProxy.com，需要VPN
+其验证码..形同虚设..
+"""
 import pickle
-from lxml import etree
 from utils import crack
+
 import requests
+from lxml import etree
+
 
 headers = {
     'Host': 'www.gatherproxy.com',
@@ -25,7 +31,7 @@ host = 'http://www.gatherproxy.com'
 
 def get_socks():
     """
-    :return: a set
+    Gatherproxy.com, get 6000+ socks proxies, at once.
     """
 
     # 抓验证码, 没抓到就重复抓到为止, 偶尔需要多请求几次
@@ -43,7 +49,7 @@ def get_socks():
             continue
     answer = crack(captcha)
     data = {
-        'Username': 'hoimi0922@gmail.com',
+        'Username': 'hoimi0922@gmail.com',  # 手动去注册一个吧老铁
         'Password': yourselfAccount,
         'Captcha': answer,
     }
@@ -60,16 +66,6 @@ def get_socks():
         return new, None
     except:
         return None, '--> Download SocksList failed.'
-
-
-def save_in_redis(proxies):
-    Redis = RedisClient(name='raw_proxy')
-    raw = {x.decode() for x in Redis.getAll()}
-    Redis.delete_all()
-    raw.update(proxies)
-    for i in raw:
-        Redis.put(i)
-    print(Redis.get_status(), ' proxies')
 
 
 if __name__ == '__main__':
