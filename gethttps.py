@@ -121,6 +121,7 @@ def get_https():
     """
     工厂函数，遍历各个代理网站抓代理存进set去重，
     这是最简单的去重方法,后续添加其他网站也很简单。
+    运行一次抓400个左右。
     """
     p = ['freeProxyFirst', 'freeProxySecond', 'freeProxyThird', 'freeProxyFourth', 'freeProxyFifth']
     proxy_set = set()
