@@ -59,25 +59,6 @@ def filterProxy_cn(proxy):
             return False
 
 
-def robustCrawl(func):
-    def decorate(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except Exception as e:
-            print(u"sorry, 抓取出错。错误原因:", e)
-
-    return decorate
-
-
-def verifyProxyFormat(proxy):
-    """
-    检查代理格式
-    """
-    import re
-    verify_regex = r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}"
-    return True if re.findall(verify_regex, proxy) else False
-
-
 if __name__ == '__main__':
     proxy = '45.32.193.119:8833'
     filterProxy_cn(proxy)
