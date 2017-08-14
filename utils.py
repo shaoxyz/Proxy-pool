@@ -39,24 +39,22 @@ def filterProxy_ab(proxy):
 def filterProxy_cn(proxy):
     """
     检验国内http(s)代理是否可用
+    你可能会想为什么后台跑验证，要用的时候直接拿。
+    想法很棒，实际上提前验证并没有什么..用，
+    因为，这次验证过了，下次一样失效，所以没必要提前验证另做保存，
+    就是质量不高且稳定性差。
     """
     proxies = {'http': 'http://' + proxy,
                'https': 'http://' + proxy}
     try:
-        # 超过10秒的代理不要
+        # 响应超过10秒的代理不要
         r = requests.get('https://www.baidu.com', proxies=proxies, timeout=10)
         if r.status_code == 200:
             print(proxy, ' is valid')
             return True
     except:
-        try:
-            r = requests.get('https://www.baidu.com', proxies=proxies, timeout=10)
-            if r.status_code == 200:
-                print(proxy, ' is valid')
-                return True
-        except:
-            print(proxy, ' is invalid')
-            return False
+        print(proxy, ' is invalid')
+        return False
 
 
 if __name__ == '__main__':
