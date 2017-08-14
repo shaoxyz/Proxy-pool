@@ -61,7 +61,7 @@ def gethttps():
     return sock
 
 
-@app.route('/startrefreshtask/')
+@app.route('/refresh/')
 def schedule():
     """
     start a schedule to refresh proxy pool
