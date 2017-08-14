@@ -12,7 +12,7 @@ from gevent import monkey
 from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
-monkey.patch_all()
+monkey.patch_all()  # 猴子补丁
 
 
 @app.route('/')
@@ -20,7 +20,8 @@ def index():
     info = {
         'Title': u'GatherValidProxy',
         'Method': [u'/getsocks  --> get a sock proxy',
-                   u'/gethttps  --> get a http(s) proxy'],
+                   u'/gethttps  --> get a http(s) proxy',
+                   u'/refresh  --> refresh proxies'],
         'Time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
     return jsonify(info)
@@ -64,12 +65,15 @@ def gethttps():
 def schedule():
     """
     start a schedule to refresh proxy pool
+    非阻塞方法，请求一次就开启了定时刷新代理的任务，
+    不用等待页面返回，因为没有返回..
+    你可以在启动app的命令行，看到刷新成功的输出。
     """
     import time
     while True:
         get_socks()
         get_https()
-        print('refresh task has been on..')
+        print('refresh task has been on..proxies will refresh 10m later!')
         time.sleep(600)
 
 
