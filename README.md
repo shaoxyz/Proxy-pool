@@ -25,18 +25,26 @@ Proxy Pool
 	通过requests get方法获取一个socks代理 
 	
 	```requests.get('localhost:5000/getsocks/').text```
+	
+	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/getsocks.png" width="50%" height="50%">
 		
 	通过requests get方法获取一个http(s)代理 
 	
 	```requests.get('localhost:5000/gethttps/').text```
+	
+	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/gethttps.png" width="50%" height="50%">
 		
 	通过requests get方法开启自动刷新服务，10分钟/次 
 	
 	```requests.get('localhost:5000/refresh/').text```
+	
+	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/show.gif" width="50%" height="50%">
 		
 	不用等待refresh的返回值，请求发送了就可以了，可以在命令行看到状态，这就是gevent的作用。
 	
 	如果10分钟没到你想再刷新一次，嗯，可以的。
+	
+	 **注：** GatherProxy.com的服务器很脆弱，经常崩掉，请爱护它 0.0
 
 --------------
 
@@ -63,12 +71,14 @@ Proxy Pool
 	4.打开浏览器试验一下
 	
 	```localhost:5000/```
+	
+	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/localhost.png" width="50%" height="50%">
 
 服务部署完了！
 
 * PLUS
 
-	> **Tips:** test.py是一个使用代理池服务的小爬虫案例，有点麻烦只是，你需要在爬虫项目中通过requests获得一个随机的代理，我不能保证这个代理就能用，毕竟免费的，所以我们直接给爬虫用，不行就换一个。
+	**Tips:** test.py是一个使用代理池服务的小爬虫案例，有点麻烦只是，你需要在爬虫项目中通过requests获得一个随机的代理，我不能保证这个代理就能用，毕竟免费的，所以我们直接给爬虫用，不行就换一个。
 
 
 ------------
