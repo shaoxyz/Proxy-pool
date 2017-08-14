@@ -6,7 +6,6 @@
 import pickle
 from lxml import etree
 from utils import crack
-from redisDB import RedisClient
 import requests
 
 headers = {
