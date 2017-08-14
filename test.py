@@ -1,3 +1,8 @@
+"""
+这是一个关于如何使用该代理池的小爬虫示例。
+前提是开启代理池服务，python app.py
+"""
+
 import time
 import requests
 from lxml import etree
@@ -31,6 +36,11 @@ def use_https():
 
 
 def test(use='socks'):
+    """
+    毕竟是免费的代理池，所以质量低且稳定性较差，解决方案：循环直到抽到可用代理，
+    个人觉得只适合对代理有一定需求且不追求速度的小爬虫项目，
+    大项目..您还是花点银子吧。^_^
+    """
     while True:
         if use == 'socks':
             proxies = use_sock()
@@ -38,11 +48,11 @@ def test(use='socks'):
             proxies = use_https()
         else:
             return 'params wrong'
-        url = 'http://www.xiaohua.com/'
+        url = 'http://www.xiaohua.com/'  # 随便选的一个笑话网站，如果请求成功就返回第一条笑话。
         try:
             r = requests.get(url, headers=headers, proxies=proxies, timeout=20)
         except:
-            print('err in requests')
+            print('requests err')
             continue
         if r.status_code == 200:
             html = etree.HTML(r.text)
@@ -55,7 +65,11 @@ def test(use='socks'):
 
 
 if __name__ == '__main__':
+    """
+    做好满篇requests err的准备吧, 
+    网上免费公布的代理就是这样=。=
+    """
     for i in range(100):
-        use = 'socks'
+        use = 'https'
         test(use)
         time.sleep(5)
