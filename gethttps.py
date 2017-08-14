@@ -5,6 +5,9 @@
 # @Author  : shaweb
 """
 从国内各个发布免费代理的网站抓代理
+部分来源其他代理池项目。
+https://github.com/jhao104/proxy_pool
+https://github.com/qiyeboy/IPProxyPool
 """
 
 import re
@@ -114,22 +117,18 @@ class GetFreeProxy(object):
             yield x
 
 
-def save_in_txt(proxies):
-    with open('ip.txt', 'a+', encoding='utf-8') as f:
-        for ip in proxies:
-            f.write(ip)
-            f.write('\n')
-
-
 def get_https():
+    """
+    工厂函数，遍历各个代理网站抓代理存进set去重，
+    这是最简单的去重方法,后续添加其他网站也很简单。
+    """
     p = ['freeProxyFirst', 'freeProxySecond', 'freeProxyThird', 'freeProxyFourth', 'freeProxyFifth']
     proxy_set = set()
     for i in p:
         for proxy in getattr(GetFreeProxy, i)():
             proxy_set.add(proxy)
     print('update ', len(proxy_set), ' proxies')
-    # _saveIntxt(proxy_set)
-    # save_in_redis(proxy_set)
+
     with open('https.pickle', 'wb') as f:
         pickle.dump(proxy_set, f, protocol=pickle.HIGHEST_PROTOCOL)
 
