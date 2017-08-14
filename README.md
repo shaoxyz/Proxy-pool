@@ -43,9 +43,11 @@ Proxy Pool
 
 	1.建议使用虚拟环境
 	
-	  ```virtualenv proxypool
-	  cd proxypool/Scripts
-	  activate```
+	```virtualenv proxypool```
+	  
+	```cd proxypool/Scripts```
+	  
+	```activate```
 	  
 	2.需要的第三方库，直接复制下面这条命令就好
 	
@@ -69,7 +71,7 @@ Proxy Pool
 ------------
 
 
-> **欢迎交流:**
+**欢迎交流:**
 
 	QQ:584927688
 	
