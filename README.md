@@ -26,19 +26,19 @@ Proxy Pool
 	
 	```requests.get('localhost:5000/getsocks/').text```
 	
-	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/getsocks.png" width="50%" height="50%">
+	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/getsocks.png" width="20%" height="20%">
 		
 	通过requests get方法获取一个http(s)代理 
 	
 	```requests.get('localhost:5000/gethttps/').text```
 	
-	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/gethttps.png" width="50%" height="50%">
+	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/gethttps.png" width="20%" height="20%">
 		
 	通过requests get方法开启自动刷新服务，10分钟/次 
 	
 	```requests.get('localhost:5000/refresh/').text```
 	
-	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/show.gif" width="50%" height="50%">
+	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/show.gif" width="20%" height="20%">
 		
 	不用等待refresh的返回值，请求发送了就可以了，可以在命令行看到状态，这就是gevent的作用。
 	
@@ -72,7 +72,7 @@ Proxy Pool
 	
 	```localhost:5000/```
 	
-	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/localhost.png" width="50%" height="50%">
+	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/localhost.png" width="20%" height="20%">
 
 服务部署完了！
 
