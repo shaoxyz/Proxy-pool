@@ -2,29 +2,14 @@
 关于如何使用该代理池的小爬虫示例。
 前提是开启代理池服务，python app.py
 """
+# -*- coding:utf-8 -*-
+# Python3
+# File    : new_test.py
+# Time    : 2017/8/16 17:39
+# Author  : Shaweb
 
-import time
 import requests
-from lxml import etree
-from bs4 import BeautifulSoup
-from utils import verifyProxyFormat
-
-headers = {
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-    'Accept-Encoding': 'gzip, deflate',
-    'Accept-Language': 'zh-CN,zh;q=0.8',
-    'Connection': 'keep-alive',
-    'Upgrade-Insecure-Requests': '1',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36',
-}
-
-
-def use_sock():
-    proxy = requests.get('http://localhost:5000/getsocks/').text
-    # proxy = '127.0.0.1:1080'
-    proxies = {'http': 'socks5://' + proxy,
-               'https': 'socks5://' + proxy}
-    return proxies
+from requests.exceptions import ProxyError
 
 
 def use_https():
@@ -35,41 +20,60 @@ def use_https():
     return proxies
 
 
-def test(use='socks'):
-    """
-    毕竟是免费的代理池，所以质量低且稳定性较差，解决方案：循环直到抽到可用代理，
-    个人觉得只适合对代理有一定需求且不追求速度的小爬虫项目，
-    大项目..您还是花点银子吧。^_^
-    """
-    while True:
-        if use == 'socks':
-            proxies = use_sock()
-        elif use == 'https':
-            proxies = use_https()
-        else:
-            return 'params wrong'
-        url = 'http://www.xiaohua.com/'  # 随便选的一个笑话网站，如果请求成功就返回第一条笑话。
+def use_socks():
+    proxy = requests.get('http://localhost:5000/getsocks/').text
+    # proxy = '127.0.0.1:1080'
+    proxies = {'http': 'socks5://' + proxy,
+               'https': 'socks5://' + proxy}
+    return proxies
+
+
+# 先取一个，
+session = requests.session()
+session.proxies.update(use_https())
+
+
+class ProxyPoolUsage(object):
+    def __init__(self):
+        self.url = 'https://movie.douban.com/subject/26363254/comments?status=P'
+        """
+            ...
+        """
+
+    def crawler(self):
         try:
-            r = requests.get(url, headers=headers, proxies=proxies, timeout=20)
-        except:
-            print('requests err')
-            continue
-        if r.status_code == 200:
-            html = etree.HTML(r.text)
-            xiaohua = html.xpath('/html/body/div[1]/div[2]/div[1]/div[2]/div[1]/div/p/a/text()')[0]
-            break
+            r = session.get(self.url)
+        except ProxyError:
+            print('proxies fucked！')
+            proxies = use_https()
+            print('try', proxies)
+            session.proxies.update(proxies)
+            return self.crawler()
         else:
-            print(r.status_code)
-            continue
-    print(xiaohua)
+            if r.status_code == 200:
+                print(r, '使用代理：', session.proxies, '成功')
+                return self.crawler()
+            else:
+                print('非代理错误。。')
+                return 'Error'
 
 
 if __name__ == '__main__':
-    """
-    做好满篇requests err的准备吧, 
-    网上免费公布的代理就是这样=。=
-    """
-    for i in range(100):
-        use = 'https'
-        test(use)
-        time.sleep(5)
+    ProxyPoolUsage().crawler()
+    
+"""
+output:
+proxies fucked！
+try {'http': 'http://175.42.102.252:8118', 'https': 'http://175.42.102.252:8118'}
+proxies fucked！
+try {'http': 'http://190.206.135.165:8080', 'https': 'http://190.206.135.165:8080'}
+proxies fucked！
+try {'http': 'http://103.217.238.36:53281', 'https': 'http://103.217.238.36:53281'}
+<Response [200]> 使用代理： {'http': 'http://103.217.238.36:53281', 'https': 'http://103.217.238.36:53281'} 成功
+<Response [200]> 使用代理： {'http': 'http://103.217.238.36:53281', 'https': 'http://103.217.238.36:53281'} 成功
+<Response [200]> 使用代理： {'http': 'http://103.217.238.36:53281', 'https': 'http://103.217.238.36:53281'} 成功
+<Response [200]> 使用代理： {'http': 'http://103.217.238.36:53281', 'https': 'http://103.217.238.36:53281'} 成功
+<Response [200]> 使用代理： {'http': 'http://103.217.238.36:53281', 'https': 'http://103.217.238.36:53281'} 成功
+<Response [200]> 使用代理： {'http': 'http://103.217.238.36:53281', 'https': 'http://103.217.238.36:53281'} 成功
+<Response [200]> 使用代理： {'http': 'http://103.217.238.36:53281', 'https': 'http://103.217.238.36:53281'} 成功
+"""
