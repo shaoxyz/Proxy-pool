@@ -8,11 +8,10 @@
 其验证码..形同虚设..
 """
 import pickle
-from utils import crack
-
-import requests
+import time
 from lxml import etree
-
+from utils import crack
+import requests
 
 headers = {
     'Host': 'www.gatherproxy.com',
@@ -31,32 +30,29 @@ host = 'http://www.gatherproxy.com'
 
 def get_socks():
     """
-    Gatherproxy.com, get 6000+ socks proxies, at once.
+    :return: a set
     """
-
-    # 抓验证码, 没抓到就重复抓到为止, 偶尔需要多请求几次
     login = host + '/subscribe/login'
-    while True:
-        try:
-            tmp = session.get(login, timeout=20).text
-            # print(tmp)
-            html = etree.HTML(tmp)
-            # print(html)
-            captcha = html.xpath('//*[@id="body"]/form/div[6]/span/text()')[0]
-            break
-        except:
-            print('GatherProxy.com request failed, retry..')
-            continue
+
+    try:
+        tmp = session.get(login, timeout=20).text
+        # print(tmp)
+        html = etree.HTML(tmp)
+        # print(html)
+        captcha = html.xpath('//*[@id="body"]/form/div[6]/span/text()')[0]
+    except Exception as e:
+        print('GatherProxy.com request failed!', e)
+        return None, '--> Request captcha failed.'
     answer = crack(captcha)
     data = {
-        'Username': 'hoimi0922@gmail.com',  # 手动去注册一个吧老铁
-        'Password': yourselfAccount,
+        'Username': 'hoimi0922@gmail.com',
+        'Password': xxx,  # 自己去注册个吧~很方便
         'Captcha': answer,
     }
     try:
         session.post(login, data=data)
     except:
-        return None, 'Login failed.'
+        return None, '--> Login failed.'
     try:
         proxies = session.post('http://www.gatherproxy.com/sockslist/plaintext').text
         new = set(proxies.replace('\n', '').split('\r'))
@@ -71,3 +67,4 @@ def get_socks():
 if __name__ == '__main__':
     proxies, err = get_socks()
     print(proxies, err)
+
