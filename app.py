@@ -7,12 +7,13 @@ import random
 import datetime
 from getsocks import get_socks
 from gethttps import get_https
+
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
 from flask import Flask, jsonify
-from gevent import monkey
-from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
-monkey.patch_all()
 
 
 @app.route('/')
@@ -62,21 +63,33 @@ def https():
 
 
 @app.route('/refresh/')
-def schedule():
+def refresh():
     """
-    Start a schedule to refresh proxy pool, don't need to wait for response
+    Refresh proxy pool
     """
-    import time
     get_socks()
     get_https()
-    print('refresh task has been on..')
-    time.sleep(600)
-    return schedule()
+    return 'refresh success!'
 
+
+scheduler = BackgroundScheduler()
+scheduler.start()
+scheduler.add_job(
+    func=refresh,
+    trigger=IntervalTrigger(minutes=10),
+    id='refresh_ProxyPool',
+    name='Refresh ProxyPool every ten minutes',
+    replace_existing=True)
+# Shut down the scheduler when exiting the app
+atexit.register(lambda: scheduler.shutdown())
 
 if __name__ == '__main__':
     get_socks()
     get_https()
+    app.run(host='0.0.0.0',
+            port=5000)
+    """    
     http_server = WSGIServer(('', 5000), app)
     print('start! 127.0.0.1:5000')
     http_server.serve_forever()
+    """
