@@ -47,7 +47,11 @@ Proxy Pool
     name='Refresh ProxyPool every ten minutes',
     replace_existing=True)```
 	
-	 **注：** GatherProxy.com的服务器很脆弱，经常崩掉，请爱护它 0.0
+	
+	 **注：** 
+	 
+	 GatherProxy.com的服务器很脆弱，自动刷新经常会出现GatherProxy.com request failed! list index out of range
+	 不要紧，不是代码的问题，服务器经常崩掉请求不到数据，请爱护它 0.0
 
 --------------
 
