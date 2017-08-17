@@ -4,32 +4,34 @@
 """
 # -*- coding:utf-8 -*-
 # Python3
-# File    : new_test.py
+# File    : usage.py
 # Time    : 2017/8/16 17:39
 # Author  : Shaweb
 
 import requests
-from requests.exceptions import ProxyError, ConnectionError
 
 
-def use_https():
-    proxy = requests.get('http://localhost:5000/https/').text
-    # proxy = '127.0.0.1:1080'
-    proxies = {'http': 'http://' + proxy,
-               'https': 'http://' + proxy}
-    return proxies
-
-
-def use_socks():
-    proxy = requests.get('http://localhost:5000/socks/').text
-    # proxy = '127.0.0.1:1080'
-    proxies = {'http': 'socks5://' + proxy,
-               'https': 'socks5://' + proxy}
-    return proxies
+def select_proxies(selection='socks'):
+    if selection == 'socks':
+        proxy = requests.get('http://localhost:5000/socks/').text
+        # proxy = '127.0.0.1:1080'
+        proxies = {'http': 'socks5://' + proxy,
+                   'https': 'socks5://' + proxy}
+        return proxies
+    elif selection == 'https':
+        proxy = requests.get('http://localhost:5000/https/').text
+        # proxy = '127.0.0.1:1080'
+        proxies = {'http': 'http://' + proxy,
+                   'https': 'http://' + proxy}
+        return proxies
+    else:
+        raise KeyError
 
 
 # 先取一个
-session = requests.session().proxies.update(use_socks())
+session = requests.session()
+session.proxies.update(select_proxies())
+
 
 class ProxyPoolUsage(object):
     def __init__(self):
@@ -38,26 +40,32 @@ class ProxyPoolUsage(object):
             ...
         """
 
-    def crawler(self):
+    def crawler(self, selection='socks'):
         try:
-            r = session.get(self.url)
+            r = session.get(self.url, timeout=10)
         except:
-            print('proxies fucked！')
-            proxies = use_socks()   # TODO: 可选择方法，或两个混用
+            print('proxy failed！')
+            if selection == 'socks':
+                proxies = select_proxies()
+            elif selection == 'https':
+                proxies = select_proxies(selection)
+            else:
+                raise KeyError
             print('try', proxies)
             session.proxies.update(proxies)
             return self.crawler()
         else:
             if r.status_code == 200:
-                print(r, '使用代理：', session.proxies, '成功')
+                print(r, 'Using proxy：', session.proxies, 'Success')
                 return self.crawler()
             else:
-                print('非代理错误。。')
+                print(r.status_code)
                 return 'Error'
 
 
 if __name__ == '__main__':
     ProxyPoolUsage().crawler()
+
 
 """
 Select https output:
