@@ -29,16 +29,7 @@ def use_socks():
 
 
 # 先取一个
-def choose(selection):
-    session = requests.session()
-
-    if selection == 'socks':
-        return session.proxies.update(use_socks())
-    elif selection == 'https':
-        return session.proxies.update(use_https())
-    else:
-        raise KeyError
-
+session = requests.session().proxies.update(use_socks())
 
 class ProxyPoolUsage(object):
     def __init__(self):
@@ -47,13 +38,12 @@ class ProxyPoolUsage(object):
             ...
         """
 
-    def crawler(self, selection='socks'):
-        session = choose(selection)
+    def crawler(self):
         try:
             r = session.get(self.url)
-        except ProxyError or ConnectionError:
+        except:
             print('proxies fucked！')
-            proxies = use_socks()
+            proxies = use_socks()   # TODO: 可选择方法，或两个混用
             print('try', proxies)
             session.proxies.update(proxies)
             return self.crawler()
