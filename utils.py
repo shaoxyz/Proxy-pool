@@ -20,7 +20,7 @@ def crack(captcha):
     else:
         raise IOError
 
-
+# 未使用
 def filterProxy_ab(proxy):
     """
     检验国外socks代理是否可用
@@ -35,7 +35,7 @@ def filterProxy_ab(proxy):
     except:
         return False
 
-
+# 未使用
 def filterProxy_cn(proxy):
     """
     检验国内http(s)代理是否可用
@@ -55,6 +55,17 @@ def filterProxy_cn(proxy):
     except:
         print(proxy, ' is invalid')
         return False
+
+    
+ # get_https方法的错误捕捉器
+def errorCatch(func):
+    def decorate(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            return "Http(s) connection error!", e
+
+    return decorate
 
 
 if __name__ == '__main__':
