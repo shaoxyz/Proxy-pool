@@ -12,25 +12,25 @@ from gevent import monkey
 from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
-monkey.patch_all()  # 猴子补丁
+monkey.patch_all()
 
 
 @app.route('/')
 def index():
     info = {
         'Title': u'Proxy-pool',
-        'Method': [u'/getsocks  --> get a sock proxy',
-                   u'/gethttps  --> get a http(s) proxy',
+        'Method': [u'/socks  --> get a sock proxy',
+                   u'/https  --> get a http(s) proxy',
                    u'/refresh  --> refresh proxies'],
         'Time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
     return jsonify(info)
 
 
-@app.route('/getsocks/')
-def getsocks():
+@app.route('/socks/')
+def socks():
     """
-    return a proxy and refresh when socks < 20
+    Return a proxy and refresh when socks < 20
     """
     socks = pickle.load(open("socks.pickle", "rb"))
     if len(socks) < 20:
@@ -44,40 +44,39 @@ def getsocks():
     return sock
 
 
-@app.route('/gethttps/')
-def gethttps():
+@app.route('/https/')
+def https():
     """
-    return a proxy and refresh when socks < 20
+    Return a proxy and refresh when socks < 20
     """
     https = pickle.load(open("https.pickle", "rb"))
     if len(https) < 20:
         result, err = get_https()
         if err:
             return err
-    sock = random.choice(list(https))
-    https.remove(sock)
+    http = random.choice(list(https))
+    https.remove(http)
     with open('https.pickle', 'wb') as f:
         pickle.dump(https, f, protocol=pickle.HIGHEST_PROTOCOL)
-    return sock
+    return http
 
 
 @app.route('/refresh/')
 def schedule():
     """
-    start a schedule to refresh proxy pool
-    非阻塞方法，请求一次就开启了定时刷新代理的任务，
-    不用等待页面返回，因为没有返回..
-    你可以在启动app的命令行，看到刷新成功的输出。
+    Start a schedule to refresh proxy pool, don't need to wait for response
     """
     import time
-    while True:
-        get_socks()
-        get_https()
-        print('refresh task has been on..proxies will refresh 10m later!')
-        time.sleep(600)
+    get_socks()
+    get_https()
+    print('refresh task has been on..')
+    time.sleep(600)
+    return schedule()
 
 
 if __name__ == '__main__':
+    get_socks()
+    get_https()
     http_server = WSGIServer(('', 5000), app)
     print('start! 127.0.0.1:5000')
     http_server.serve_forever()
