@@ -15,6 +15,8 @@ import pickle
 import requests
 from bs4 import BeautifulSoup
 
+from utils import errorCatch
+
 
 class GetFreeProxy(object):
     """
@@ -33,6 +35,7 @@ class GetFreeProxy(object):
         pass
 
     @staticmethod
+    @errorCatch
     def freeProxyFirst(page=10):
         """
         快代理IP http://www.kuaidaili.com/
@@ -51,6 +54,7 @@ class GetFreeProxy(object):
                 yield x
 
     @staticmethod
+    @errorCatch
     def freeProxySecond(proxy_number=50):
         """
         代理66 http://www.66ip.cn/
@@ -64,6 +68,7 @@ class GetFreeProxy(object):
             yield proxy
 
     @staticmethod
+    @errorCatch
     def freeProxyThird():
         """
         西刺 http://api.xicidaili.com/free2016.txt
@@ -83,6 +88,7 @@ class GetFreeProxy(object):
                 yield x
 
     @staticmethod
+    @errorCatch
     def freeProxyFourth():
         """
         无忧 http://www.data5u.com/
@@ -102,7 +108,8 @@ class GetFreeProxy(object):
                 yield x
 
     @staticmethod
-    def freeProxyFifth(days=1):
+    @errorCatch
+    def freeProxyFifth():
         """
         ip181 http://www.ip181.com/
         """
@@ -118,11 +125,6 @@ class GetFreeProxy(object):
 
 
 def get_https():
-    """
-    工厂函数，遍历各个代理网站抓代理存进set去重，
-    这是最简单的去重方法,后续添加其他网站也很简单。
-    运行一次抓400个左右。
-    """
     p = ['freeProxyFirst', 'freeProxySecond', 'freeProxyThird', 'freeProxyFourth', 'freeProxyFifth']
     proxy_set = set()
     for i in p:
@@ -136,3 +138,4 @@ def get_https():
 
 if __name__ == '__main__':
     get_https()
+
