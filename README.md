@@ -24,25 +24,28 @@ Proxy Pool
 
 	通过requests get方法获取一个socks代理 
 	
-	```requests.get('localhost:5000/getsocks/').text```
+	```requests.get('localhost:5000/socks/').text```
 	
 	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/getsocks.png" width="20%" height="20%">
 		
 	通过requests get方法获取一个http(s)代理 
 	
-	```requests.get('localhost:5000/gethttps/').text```
+	```requests.get('localhost:5000/https/').text```
 	
 	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/gethttps.png" width="20%" height="20%">
 		
-	通过requests get方法开启自动刷新服务，10分钟/次 
+	通过requests get方法手动刷新proxypool，如果需要的话。
 	
 	```requests.get('localhost:5000/refresh/').text```
 	
-	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/show.gif" width="20%" height="20%">
-		
-	不用等待refresh的返回值，请求发送了就可以了，可以在命令行看到状态，这就是gevent的作用。
+	 定时任务是每过10分钟自动刷新一次
 	
-	如果10分钟没到你想再刷新一次，嗯，可以的。
+	 ```scheduler.add_job(
+    func=refresh,
+    trigger=IntervalTrigger(minutes=10),
+    id='refresh_ProxyPool',
+    name='Refresh ProxyPool every ten minutes',
+    replace_existing=True)```
 	
 	 **注：** GatherProxy.com的服务器很脆弱，经常崩掉，请爱护它 0.0
 
@@ -62,7 +65,7 @@ Proxy Pool
 	  
 	2.需要的第三方库，直接复制下面这条命令就好
 	
-	```pip install requests lxml beautifulsoup4 flask gevent ```
+	```pip install requests lxml beautifulsoup4 flask apscheduler ```
 	
 	3.开启服务
 	
@@ -78,7 +81,7 @@ Proxy Pool
 
 * PLUS
 
-	**Tips:** test.py是一个使用代理池服务的小爬虫案例，有点麻烦只是，你需要在爬虫项目中通过requests获得一个随机的代理，我不能保证这个代理就能用，毕竟免费的，所以我们直接给爬虫用，不行就换一个。
+	**Tips:** usage.py是一个使用代理池服务的小爬虫案例，有点麻烦只是，你需要在爬虫项目中通过requests获得一个随机的代理，我不能保证这个代理就能用，毕竟免费的，所以我们直接给爬虫用，不行就换一个。
 
 
 ------------
