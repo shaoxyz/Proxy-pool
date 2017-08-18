@@ -1,7 +1,7 @@
 Proxy Pool
 ==========
 包含http(s)/socks的极简代理池服务。
-注：大佬就不用看了，你们分分钟撸一个自己的^_^
+
 
 > python3.6  
 > windows 
@@ -15,7 +15,7 @@ Proxy Pool
 		
 	免费代理根本不需要用数据库做保存，也不需要验证好了放数据库，需要的时候拿。免费代理就像丢盔弃甲的残兵败将，有力气的还能挥两下钝剑，也就那两下，上一秒活着，下一秒就死了，又或者这一秒躺着像个死人，下一秒又爬起来走两步，
 	
-	**极低的质量和极低的稳定性**根本**不值得**提前做验证使用数据库当宝一样保存起来。
+	**极低的质量和极低的稳定性**根本**不值得**提前做验证使用数据库当宝一样保存起来。就用pickle就好。
 		
 	这个代理池的核心部分也就100来行，即便是初学者，也能快速开始使用。建议你先从爬代理的两个py开始看。
 		
@@ -50,8 +50,7 @@ Proxy Pool
 	
 	 **注：** 
 	 
-	 GatherProxy.com的服务器很脆弱，自动刷新经常会出现GatherProxy.com request failed! list index out of range
-	 不要紧，不是代码的问题，服务器经常崩掉请求不到数据，请爱护它 0.0
+	 GatherProxy.com的服务器很脆弱，服务器经常崩掉请求不到数据，请爱护它 0.0
 
 --------------
 
@@ -67,7 +66,7 @@ Proxy Pool
 	  
 	```activate```
 	  
-	2.需要的第三方库，直接复制下面这条命令就好
+	2.需要的第三方库，你可以通过requirements.txt安装，也可以直接复制下面这条命令
 	
 	```pip install requests lxml beautifulsoup4 flask apscheduler ```
 	
@@ -81,7 +80,7 @@ Proxy Pool
 	
 	<img src="https://github.com/Shaw-lib/Proxy-pool/raw/master/localhost.png" width="20%" height="20%">
 
-服务部署完了！
+到此，服务部署完了！
 
 * PLUS
 
