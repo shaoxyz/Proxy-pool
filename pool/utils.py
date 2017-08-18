@@ -24,7 +24,7 @@ def crack(captcha):
     else:
         raise IOError
 
-
+# 实际未使用，用来检测某个代理的可用度
 def filterProxy_ab(proxy):
     """
     检验国外socks代理是否可用
@@ -39,7 +39,7 @@ def filterProxy_ab(proxy):
     except:
         return False
 
-
+# 实际未使用，用来检测某个代理的可用度
 def filterProxy_cn(proxy):
     """
     检验国内http(s)代理是否可用
@@ -60,8 +60,12 @@ def filterProxy_cn(proxy):
         print(proxy, ' is invalid')
         return False
 
-
+    
 def errorCatch(func):
+    """
+    一个简单的装饰器，用于捕捉gethttps中可能发生的错误，防止程序运行中断掉，
+    发生错误的源自爬虫代理网站服务器。
+    """
     def decorate(*args, **kwargs):
         try:
             return func(*args, **kwargs)
