@@ -28,6 +28,7 @@ host = 'http://www.gatherproxy.com'
 
 def get_socks():
     """
+    通过gatherproxy.com下载6000+个socks代理，对小项目来说足够多了。
     :return: a set
     """
     """
@@ -54,7 +55,7 @@ def get_socks():
         answer = crack(captcha)
         data = {
             'Username': 'hoimi0922@gmail.com',
-            'Password': 'P{SX-cv_',
+            'Password': 'P{SX-cv_',  # 0.0自己去注册一个吧
             'Captcha': answer,
         }
         try:
